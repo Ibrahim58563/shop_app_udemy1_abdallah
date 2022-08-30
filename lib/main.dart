@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:shop_app_abdallah/layout/shop_app/on_boarding/on_boarding_screen.dart';
+import 'package:shop_app_abdallah/shared/network/remote/dio_helper.dart';
 import 'package:shop_app_abdallah/shared/styles/themes.dart';
 
 void main() {
+  DioHelper.init();
   runApp(const MyApp());
 }
 

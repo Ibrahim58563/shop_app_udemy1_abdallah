@@ -37,7 +37,7 @@ class DioHelper {
   }) async {
     dio?.options.headers = {
       'lang': lang,
-      'Authoriztion': token,
+      'Authorization': token,
     };
     return dio!.post(
       url,
