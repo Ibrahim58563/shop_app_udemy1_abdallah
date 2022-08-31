@@ -36,10 +36,11 @@ class DioHelper {
     String? token,
   }) async {
     dio?.options.headers = {
+      'Content-Type': 'application/json',
       'lang': lang,
-      'Authorization': token,
+      'Authorization': token ?? '',
     };
-    return dio!.post(
+    return await dio!.post(
       url,
       queryParameters: query,
       data: data,
