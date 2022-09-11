@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import '../../styles/colors.dart';
+import '../styles/colors.dart';
 
 Widget defaultButton({
   double width = double.infinity,
@@ -259,40 +259,40 @@ Widget defaultTextButton({
 }) =>
     TextButton(onPressed: function, child: Text(text.toUpperCase()));
 
-// void showToast({
-//   required String text,
-//  required ToastStates state,
-// }){
+void showToast({
+  required String text,
+  required ToastStates state,
+}) {
+  Fluttertoast.showToast(
+    msg: text,
+    toastLength: Toast.LENGTH_LONG,
+    gravity: ToastGravity.BOTTOM,
+    timeInSecForIosWeb: 5,
+    backgroundColor: chooseToastColor(state),
+    textColor: Colors.black,
+    fontSize: 16.0,
+  );
+}
 
-//   Fluttertoast.showToast(
-//       msg: text,
-//       toastLength: Toast.LENGTH_LONG,
-//       gravity: ToastGravity.BOTTOM,
-//       timeInSecForIosWeb: 5,
-//       backgroundColor:chooseToastColor(state),
-//       textColor: Colors.black,
-//       fontSize: 16.0,
-//   );
-// }
-// enum ToastStates {SUCCESS,ERROR,WARNING}
+enum ToastStates { SUCCESS, ERROR, WARNING }
 
-// Color chooseToastColor(ToastStates state){
-//   Color? color;
-//  switch(state) {
-//    case ToastStates.ERROR:
-//      color = Colors.red;
-//      break;
-//    case ToastStates.SUCCESS:
-//      color = Colors.green;
-//      break;
-//    case ToastStates.WARNING:
-//      color = Colors.amber;
-//      break;
-//  }
+Color chooseToastColor(ToastStates state) {
+  Color color;
+  switch (state) {
+    case ToastStates.SUCCESS:
+      color = Colors.green;
+      break;
 
-//    return color;
+    case ToastStates.ERROR:
+      color = Colors.red;
+      break;
 
-// }
+    case ToastStates.WARNING:
+      color = Colors.amber;
+      break;
+  }
+  return color;
+}
 
 // Widget buildListItem( model,context,{bool? isOldPrice = true}){
 //   return Padding(
