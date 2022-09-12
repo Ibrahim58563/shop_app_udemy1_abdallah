@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_app_abdallah/cubit/cubit.dart';
 import 'package:shop_app_abdallah/cubit/states.dart';
 import 'package:shop_app_abdallah/models/shop_app/home_model.dart';
+import 'package:shop_app_abdallah/shared/styles/colors.dart';
 
 class ProductsScreen extends StatelessWidget {
   const ProductsScreen({Key? key}) : super(key: key);
@@ -14,20 +15,22 @@ class ProductsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ShopCubit, ShopStates>(
-        builder: (context, state) {
-          return ConditionalBuilder(
-            condition: ShopCubit.get(context).homeModel != null,
-            builder: (context) =>
-                productsBuilder(ShopCubit.get(context).homeModel!),
-            fallback: (context) => Center(
-              child: CircularProgressIndicator(),
-            ),
-          );
-        },
-        listener: (context, state) {});
+      listener: (context, state) {},
+      builder: (context, state) {
+        return ConditionalBuilder(
+          condition: ShopCubit.get(context).homeModel != null,
+          builder: (context) =>
+              productsBuilder(ShopCubit.get(context).homeModel!),
+          fallback: (context) => Center(
+            child: CircularProgressIndicator(),
+          ),
+        );
+      },
+    );
   }
 
   Widget productsBuilder(HomeModel model) => SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
         child: Column(
           children: [
             CarouselSlider(
@@ -59,12 +62,12 @@ class ProductsScreen extends StatelessWidget {
             Container(
               color: Colors.red,
               child: GridView.count(
-                shrinkWrap: false,
+                shrinkWrap: true,
                 physics: NeverScrollableScrollPhysics(),
                 crossAxisCount: 2,
-                mainAxisSpacing: 10.0,
-                crossAxisSpacing: 10.0,
-                childAspectRatio: 1 / 1,
+                mainAxisSpacing: 1.0,
+                crossAxisSpacing: 1.0,
+                childAspectRatio: 1 / 1.58,
                 children: List.generate(
                   model.data!.products.length,
                   (index) => buildGridProduct(
@@ -76,13 +79,82 @@ class ProductsScreen extends StatelessWidget {
           ],
         ),
       );
-  Widget buildGridProduct(ProductModel model) => Column(
-        children: [
-          Image(
-            image: NetworkImage(model.image!),
-            width: double.infinity,
-            fit: BoxFit.cover,
-          )
-        ],
+  Widget buildGridProduct(ProductModel model) => Container(
+        color: Colors.white,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Stack(
+              alignment: AlignmentDirectional.bottomStart,
+              children: [
+                Image(
+                  image: NetworkImage(model.image!),
+                  width: double.infinity,
+                  height: 200,
+                ),
+                if (model.discount != 0)
+                  Container(
+                    color: Colors.red,
+                    padding: EdgeInsets.symmetric(horizontal: 5.0),
+                    child: Text(
+                      'DISCOUNT',
+                      style: TextStyle(fontSize: 8.0, color: Colors.white),
+                    ),
+                  )
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    model.name!,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: 14.0,
+                      height: 1.3,
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        '${model.price.round()}',
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 12.0,
+                          color: defaultColor,
+                        ),
+                      ),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      if (model.discount != 0)
+                        Text(
+                          '${model.oldPrice.round()}',
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontSize: 12.0,
+                            color: Colors.grey,
+                            decoration: TextDecoration.lineThrough,
+                          ),
+                        ),
+                      Spacer(),
+                      IconButton(
+                        padding: EdgeInsets.zero,
+                        onPressed: () {},
+                        icon: Icon(
+                          Icons.favorite_border,
+                          size: 14,
+                        ),
+                      )
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       );
 }
