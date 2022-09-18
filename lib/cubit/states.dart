@@ -9,3 +9,7 @@ class ShopLoadingHomeDataState extends ShopStates {}
 class ShopSucessHomeDataState extends ShopStates {}
 
 class ShopErrorHomeDataState extends ShopStates {}
+
+class ShopSucessCategoriesDataState extends ShopStates {}
+
+class ShopErrorCategoriesDataState extends ShopStates {}

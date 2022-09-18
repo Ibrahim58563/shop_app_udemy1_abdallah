@@ -294,6 +294,13 @@ Color chooseToastColor(ToastStates state) {
   return color;
 }
 
+Widget myDivider() => Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: Divider(
+        height: 1,
+        color: Colors.grey[300],
+      ),
+    );
 // Widget buildListItem( model,context,{bool? isOldPrice = true}){
 //   return Padding(
 //     padding: const EdgeInsets.all(20.0),

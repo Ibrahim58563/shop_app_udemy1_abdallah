@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_app_abdallah/categories/categories_screen.dart';
+import 'package:shop_app_abdallah/models/shop_app/categories_model.dart';
 import 'package:shop_app_abdallah/models/shop_app/home_model.dart';
 import 'package:shop_app_abdallah/products/products_screen.dart';
 import 'package:shop_app_abdallah/settings/settings_screen.dart';
@@ -17,10 +18,10 @@ class ShopCubit extends Cubit<ShopStates> {
   int currentIndex = 0;
 
   List<Widget> bottomScreens = [
-    ProductsScreen(),
-    categoriesScreen(),
-    favoritesScreen(),
-    settingsScreen(),
+    const ProductsScreen(),
+    const categoriesScreen(),
+    const favoritesScreen(),
+    const settingsScreen(),
   ];
 
   void changeBottom(int index) {
@@ -40,6 +41,20 @@ class ShopCubit extends Cubit<ShopStates> {
     }).catchError((error) {
       print(error.toString());
       emit(ShopErrorHomeDataState());
+    });
+  }
+
+  CategoriesModel? categoriesModel;
+
+  void getCategories() {
+    DioHelper.getData(
+      url: GET_CATEGORIES,
+    ).then((value) {
+      categoriesModel = CategoriesModel?.fromJson(value.data);
+      emit(ShopSucessCategoriesDataState());
+    }).catchError((error) {
+      print(error.toString());
+      emit(ShopErrorCategoriesDataState());
     });
   }
 }
