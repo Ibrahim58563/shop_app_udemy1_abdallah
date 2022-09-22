@@ -12,6 +12,7 @@ import 'package:shop_app_abdallah/shared/styles/themes.dart';
 
 void main() async {
   debugPrint("Main٠٠");
+  debugPrint('${token} token');
   WidgetsFlutterBinding.ensureInitialized();
   DioHelper.init();
   await CacheHelper.init();
@@ -28,7 +29,7 @@ void main() async {
   } else {
     widget = OnBoardingScreen();
   }
-  // widget = ShopLayout();
+  widget = ShopLayout();
   debugPrint(onBoarding.toString());
   runApp(MyApp(
     startWidget: widget,

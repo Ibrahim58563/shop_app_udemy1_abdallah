@@ -1,4 +1,3 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
@@ -8,6 +7,7 @@ import 'package:shop_app_abdallah/cubit/cubit.dart';
 import 'package:shop_app_abdallah/cubit/states.dart';
 import 'package:shop_app_abdallah/models/shop_app/categories_model.dart';
 import 'package:shop_app_abdallah/models/shop_app/home_model.dart';
+import 'package:shop_app_abdallah/shared/components/components.dart';
 import 'package:shop_app_abdallah/shared/styles/colors.dart';
 
 class ProductsScreen extends StatelessWidget {
@@ -16,13 +16,25 @@ class ProductsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ShopCubit, ShopStates>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        if (state is ShopSucessChangeFavoritesState) {
+          if (!state.model.status!) {
+            showToast(
+              text: state.model.message!,
+              state: ToastStates.ERROR,
+            );
+          }
+        }
+      },
       builder: (context, state) {
         return ConditionalBuilder(
           condition: ShopCubit.get(context).homeModel != null &&
               ShopCubit.get(context).categoriesModel != null,
-          builder: (context) => builderWidget(ShopCubit.get(context).homeModel!,
-              ShopCubit.get(context).categoriesModel!),
+          builder: (context) => builderWidget(
+            ShopCubit.get(context).homeModel!,
+            ShopCubit.get(context).categoriesModel!,
+            context,
+          ),
           fallback: (context) => Center(
             child: CircularProgressIndicator(),
           ),
@@ -31,36 +43,34 @@ class ProductsScreen extends StatelessWidget {
     );
   }
 
-  Widget builderWidget(HomeModel model, CategoriesModel categoriesModel) =>
+  Widget builderWidget(
+          HomeModel model, CategoriesModel categoriesModel, context) =>
       SingleChildScrollView(
         scrollDirection: Axis.horizontal,
-        physics: BouncingScrollPhysics(),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CarouselSlider(
-              items: model.data!.banners
-                  .map(
-                    (e) => Image(
-                      image: NetworkImage('${e.image}'),
-                      width: double.infinity,
-                      fit: BoxFit.cover,
-                    ),
-                  )
-                  .toList(),
-              options: CarouselOptions(
-                height: 250,
-                initialPage: 0,
-                viewportFraction: 1.0,
-                enableInfiniteScroll: true,
-                reverse: false,
-                autoPlay: true,
-                autoPlayInterval: Duration(seconds: 3),
-                autoPlayAnimationDuration: Duration(seconds: 1),
-                autoPlayCurve: Curves.fastOutSlowIn,
-                scrollDirection: Axis.horizontal,
-              ),
-            ),
+            // CarouselSlider(
+            //     items: model.data!.banners
+            //         .map((e) => Image(
+            //               image: NetworkImage('${e.image}'),
+            //               height: 50,
+            //               width: double.infinity,
+            //               fit: BoxFit.cover,
+            //             ))
+            //         .toList(),
+            //     options: CarouselOptions(
+            //       height: 250.0,
+            //       initialPage: 0,
+            //       viewportFraction: 1.0,
+            //       enableInfiniteScroll: true,
+            //       reverse: false,
+            //       autoPlay: true,
+            //       autoPlayInterval: const Duration(seconds: 3),
+            //       autoPlayAnimationDuration: const Duration(seconds: 1),
+            //       autoPlayCurve: Curves.fastOutSlowIn,
+            //       scrollDirection: Axis.horizontal,
+            //     )),
             SizedBox(
               height: 10.0,
             ),
@@ -83,8 +93,8 @@ class ProductsScreen extends StatelessWidget {
                   ),
                   Container(
                     height: 100.0,
+                    width: 100.0,
                     child: ListView.separated(
-                      physics: BouncingScrollPhysics(),
                       scrollDirection: Axis.horizontal,
                       shrinkWrap: true,
                       itemBuilder: (context, index) =>
@@ -109,22 +119,22 @@ class ProductsScreen extends StatelessWidget {
               ),
             ),
             Container(
+              height: 100,
+              width: 100,
               color: Colors.red,
               child: GridView.count(
                 shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
                 crossAxisCount: 2,
                 mainAxisSpacing: 1.0,
                 crossAxisSpacing: 1.0,
                 childAspectRatio: 1 / 1.58,
                 children: List.generate(
                   model.data!.products.length,
-                  (index) => buildGridProduct(
-                    model.data!.products[index],
-                  ),
+                  (index) =>
+                      buildGridProduct(model.data!.products[index], context),
                 ),
               ),
-            )
+            ),
           ],
         ),
       );
@@ -154,7 +164,7 @@ class ProductsScreen extends StatelessWidget {
           )
         ],
       );
-  Widget buildGridProduct(ProductModel model) => Container(
+  Widget buildGridProduct(ProductModel model, context) => Container(
         color: Colors.white,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

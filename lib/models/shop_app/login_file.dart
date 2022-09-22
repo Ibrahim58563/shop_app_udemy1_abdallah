@@ -15,9 +15,9 @@ class UserData {
   String? email;
   String? phone;
   String? image;
-  int? points;
-  int? credit;
-  String? token;
+  dynamic points;
+  dynamic credit;
+  dynamic token;
   UserData({
     this.id,
     this.name,

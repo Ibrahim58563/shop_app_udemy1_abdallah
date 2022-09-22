@@ -1,14 +1,13 @@
 import 'package:dio/dio.dart';
+import 'package:shop_app_abdallah/shared/network/local/cache_helper.dart';
 
 class DioHelper {
   static Dio? dio;
   static init() {
     dio = Dio(BaseOptions(
-        baseUrl: 'https://student.valuxapps.com/api/',
-        receiveDataWhenStatusError: true,
-        headers: {
-          'Content-Type': 'application/json',
-        }));
+      baseUrl: 'https://student.valuxapps.com/api/',
+      receiveDataWhenStatusError: true,
+    ));
   }
 
   static Future<Response> getData({
@@ -17,15 +16,12 @@ class DioHelper {
     String lang = 'en',
     String? token,
   }) async {
-    dio?.options.headers = {
+    dio!.options.headers = {
       'Content-Type': 'application/json',
       'lang': lang,
-      'Authoriztion': token ?? '',
+      'Authorization': token ?? '',
     };
-    return await dio!.get(
-      url,
-      queryParameters: query,
-    );
+    return await dio!.get(url, queryParameters: query);
   }
 
   static Future<Response> postData({
@@ -35,15 +31,48 @@ class DioHelper {
     String lang = 'en',
     String? token,
   }) async {
-    dio?.options.headers = {
+    dio!.options.headers = {
       'Content-Type': 'application/json',
       'lang': lang,
       'Authorization': token ?? '',
     };
-    return await dio!.post(
+    return dio!.post(url, data: data, queryParameters: query);
+  }
+
+  static Future<Response> putData({
+    required String url,
+    Map<String, dynamic>? query,
+    required Map<String, dynamic> data,
+    String lang = 'en',
+    String? token,
+  }) async {
+    dio!.options.headers = {
+      'Content-Type': 'application/json',
+      'lang': lang,
+      'Authorization': token ?? '',
+    };
+    return dio!.put(
       url,
-      queryParameters: query,
       data: data,
+      queryParameters: query,
+    );
+  }
+
+  // delete
+  static Future<Response> deleteData(
+      {required url,
+      Map<String, dynamic>? data,
+      String? token,
+      language = 'en'}) {
+    String? userToken = CacheHelper.getData(key: 'userToken').toString();
+    return dio!.delete(
+      url,
+      data: data,
+      options: Options(headers: {
+        'lang': language,
+        'Content_Type': 'application/json',
+        'Authorization': token ?? '',
+      }),
     );
   }
 }
