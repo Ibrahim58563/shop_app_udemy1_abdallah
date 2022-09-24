@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
@@ -46,31 +47,33 @@ class ProductsScreen extends StatelessWidget {
   Widget builderWidget(
           HomeModel model, CategoriesModel categoriesModel, context) =>
       SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
+        // scrollDirection: Axis.horizontal,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // CarouselSlider(
-            //     items: model.data!.banners
-            //         .map((e) => Image(
-            //               image: NetworkImage('${e.image}'),
-            //               height: 50,
-            //               width: double.infinity,
-            //               fit: BoxFit.cover,
-            //             ))
-            //         .toList(),
-            //     options: CarouselOptions(
-            //       height: 250.0,
-            //       initialPage: 0,
-            //       viewportFraction: 1.0,
-            //       enableInfiniteScroll: true,
-            //       reverse: false,
-            //       autoPlay: true,
-            //       autoPlayInterval: const Duration(seconds: 3),
-            //       autoPlayAnimationDuration: const Duration(seconds: 1),
-            //       autoPlayCurve: Curves.fastOutSlowIn,
-            //       scrollDirection: Axis.horizontal,
-            //     )),
+            CarouselSlider(
+              items: model.data!.banners
+                  .map(
+                    (e) => Image(
+                      image: NetworkImage('${e.image}'),
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    ),
+                  )
+                  .toList(),
+              options: CarouselOptions(
+                height: 250,
+                initialPage: 0,
+                viewportFraction: 1.0,
+                enableInfiniteScroll: true,
+                reverse: false,
+                autoPlay: true,
+                autoPlayInterval: Duration(seconds: 3),
+                autoPlayAnimationDuration: Duration(seconds: 1),
+                autoPlayCurve: Curves.fastOutSlowIn,
+                scrollDirection: Axis.horizontal,
+              ),
+            ),
             SizedBox(
               height: 10.0,
             ),
@@ -93,10 +96,10 @@ class ProductsScreen extends StatelessWidget {
                   ),
                   Container(
                     height: 100.0,
-                    width: 100.0,
+                    // width: 100.0,
                     child: ListView.separated(
                       scrollDirection: Axis.horizontal,
-                      shrinkWrap: true,
+                      // shrinkWrap: true,
                       itemBuilder: (context, index) =>
                           buildCategoryItem(categoriesModel.data!.data[index]),
                       separatorBuilder: (context, index) => SizedBox(
@@ -119,11 +122,12 @@ class ProductsScreen extends StatelessWidget {
               ),
             ),
             Container(
-              height: 100,
-              width: 100,
+              // height: 100,
+              // width: 100,
               color: Colors.red,
               child: GridView.count(
                 shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
                 crossAxisCount: 2,
                 mainAxisSpacing: 1.0,
                 crossAxisSpacing: 1.0,
@@ -175,7 +179,7 @@ class ProductsScreen extends StatelessWidget {
                 Image(
                   image: NetworkImage(model.image!),
                   width: double.infinity,
-                  height: 200,
+                  height: 180,
                 ),
                 if (model.discount != 0)
                   Container(

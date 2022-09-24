@@ -15,7 +15,7 @@ class HomeDataModel {
       banners.add(BannerModel.fromJson(element));
     });
     json['products'].forEach((element) {
-      banners.add(BannerModel.fromJson(element));
+      products.add(ProductModel.fromJson(element));
     });
   }
 }
